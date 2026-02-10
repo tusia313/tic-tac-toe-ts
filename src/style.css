@@ -1,0 +1,73 @@
+body,
+html {
+  margin: 0;
+  background-color: slategray;
+}
+* {
+  box-sizing: border-box;
+}
+:root {
+  --border-width: 3px;
+  --border-color: rgba(0, 0, 0, 0.5);
+}
+#app {
+  max-width: 500px;
+  width: 90vw;
+  margin: 0 auto;
+  margin-top: 4rem;
+  padding: 2rem 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  background-color: oldlace;
+}
+#board {
+  display: grid; /* Mówisz przeglądarce: "Ten element to teraz siatka" */
+  grid-template-columns: repeat(3, auto); /* Stwórz 3 kolumny, szerokość dobierz automatycznie */
+  justify-content: center; /* Wyśrodkuj całą siatkę w poziomie */
+}
+.cell {
+  height: 4rem;
+  width: 4rem;
+  background-color: transparent;
+  border: none;
+  font-weight: 600;
+  font-size: 50px;
+}
+/* Dzięki atrybutowi data-content możemy przechowywać w HTML-u informację o tym, co jest w danej komórce (X, O lub pusta). Później możemy tę informację wykorzystać w CSS-ie do stylowania. */
+.cell::after {
+  content: attr(data-content);
+}
+ /* Kolory dla X i O */
+[data-content="X"] {
+  color: palevioletred;
+}
+[data-content="O"] {
+  color: darkcyan;
+}
+/* Dodajemy obramowanie tylko do zewnętrznych krawędzi, aby uniknąć podwójnych linii między komórkami - sprytne! */
+[data-row="0"] {
+  border-bottom: solid var(--border-width) var(--border-color);
+}
+[data-row="2"] {
+  border-top: solid var(--border-width) var(--border-color);
+}
+[data-col="0"] {
+  border-right: solid var(--border-width) var(--border-color);
+}
+[data-col="2"] {
+  border-left: solid var(--border-width) var(--border-color);
+}
+button {
+  margin-top: 2rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: transparent;
+  border: solid var(--border-width) var(--border-color);
+  cursor: pointer;
+}
+button:hover {
+  background-color: var(--border-color);
+  color:aliceblue;
+} 
+
