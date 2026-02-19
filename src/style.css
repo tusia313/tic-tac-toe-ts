@@ -41,7 +41,7 @@ html {
 [data-content="X"] {
   color: palevioletred;
 }
-[data-content="O"] {
+[data-content="0"] {
   color: darkcyan;
 }
 /* Dodajemy obramowanie tylko do zewnętrznych krawędzi, aby uniknąć podwójnych linii między komórkami - sprytne! */
@@ -57,7 +57,7 @@ html {
 [data-col="2"] {
   border-left: solid var(--border-width) var(--border-color);
 }
-button {
+#reset {
   margin-top: 2rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
@@ -66,7 +66,7 @@ button {
   border: solid var(--border-width) var(--border-color);
   cursor: pointer;
 }
-button:hover {
+#reset:hover {
   background-color: var(--border-color);
   color:aliceblue;
 } 
