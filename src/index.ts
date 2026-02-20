@@ -1,12 +1,12 @@
 import confetti from "canvas-confetti";
 import "./style.css";
 
-//1.Pobieramy elementy z HTMLu.
+//Pobieramy elementy z HTMLu.
 const appElement = document.getElementById("app") as HTMLDivElement;
 const boardElement = document.getElementById("board") as HTMLDivElement
 const ROW_COUNT: number = 3
 const COL_COUNT: number = 3
-// 2. Definiujemy stan gry (pamięć). To jest nasza wirtualna plansza - 3 wiersze po 3 puste pola.
+// Definiujemy stan gry (pamięć). To jest nasza wirtualna plansza - 3 wiersze po 3 puste pola.
 type Cell = "" | "X" | "0"
 type TickTacToeBoard = [
     [Cell, Cell, Cell],
@@ -52,7 +52,7 @@ function renderBoard(): void {
     }
     const moveElement = document.createElement("p")
     moveElement.id = "move-element"
-    moveElement.textContent = `Current move: ${currentMove}`
+    moveElement.textContent = winner ? `Winner: ${winner}` : `Current move: ${currentMove}`
     moveElement.classList.add("move-element")
     appElement.insertBefore(moveElement, document.getElementById("reset"))
 }
@@ -68,6 +68,13 @@ const victories: Victory[] = [
     [[0, 0], [1, 1], [2, 2]], // przekątne
     [[0, 2], [1, 1], [2, 0]]
 ]
+function celebrate(): void {
+    confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+    })
+}
 function checkWinner(): Cell | "Draw" {
     for (let victory of victories) {
         const cell1 = boardState[victory[0][0]][victory[0][1]]
@@ -78,38 +85,36 @@ function checkWinner(): Cell | "Draw" {
             return cell1 // zwracamy symbol zwycięzcy ('X' lub 'O')
         }
     }
-    let isDraw = true
-    // Sprawdzamy wiersze
+    // 2. Sprawdzamy remis (przechodzimy przez CAŁĄ planszę)
+    let isDraw = true;
     for (let row = 0; row < ROW_COUNT; row++) {
         for (let col = 0; col < COL_COUNT; col++) {
             if (boardState[row][col] === "") {
-                isDraw = false // jeśli znajdziemy puste pole, to nie jest remis
-                break
+                isDraw = false; // znaleźliśmy puste pole, więc to nie remis
+                break;
             }
         }
-        if (isDraw) return "Draw" // jeśli po sprawdzeniu wszystkich pól nie znaleźliśmy pustego, to jest remis
-        return "" // jeśli nie ma zwycięzcy i nie ma remisu, to zwracamy pusty string
     }
+    // 3. Dopiero po zakończeniu obu pętli zwracamy wynik
+    if (isDraw) {
+        return "Draw";
+    }
+    // Jeśli nikt nie wygrał i nie ma remisu, gramy dalej
+    return "";
 }
-    function init(): void {
-        const resetButton = document.getElementById("reset") as HTMLButtonElement
-        if (!resetButton) throw new Error("Nie można znaleźć elementu #reset")
-        resetButton.addEventListener("click", () => {
-            boardState = [
-                ['', '', ''],
-                ['', '', ''],
-                ['', '', '']
-            ]
-            currentMove = 'X'
-            renderBoard()
-        })
+function init(): void {
+    const resetButton = document.getElementById("reset") as HTMLButtonElement
+    if (!resetButton) throw new Error("Nie można znaleźć elementu #reset")
+    resetButton.addEventListener("click", () => {
+        boardState = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ]
+        currentMove = 'X'
+        winner = ""
         renderBoard()
-    }
-    init()
-    function celebrate(): void {
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 }
-        })
-    }
+    })
+    renderBoard()
+}
+init()
